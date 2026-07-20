@@ -1,0 +1,12 @@
+{
+  "name": "2B-lvyou-pachong",
+  "description": "Compliant Crawlab lead collection pipeline: authorized browser crawling/import, contact extraction, and Google Sheets export.",
+  "language": "python",
+  "entrypoint": "python src/main.py",
+  "install": "pip install -r requirements.txt && python -m playwright install chromium",
+  "env": {
+    "GOOGLE_SHEET_ID": "1eUknA5fqniT1KMLdsmqKSrpVXSZW726e3MXvfieOUU8",
+    "GOOGLE_WORKSHEET_NAME": "leads",
+    "DRY_RUN": "false"
+  }
+}

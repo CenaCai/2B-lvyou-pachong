@@ -1,0 +1,10 @@
+.env
+credentials/
+*.json
+!crawlab.project.json
+__pycache__/
+*.pyc
+.venv/
+output/
+logs/
+playwright-report/
