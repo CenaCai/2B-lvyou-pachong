@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 
@@ -11,6 +12,12 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 
 def _credentials() -> Credentials:
+    raw_json_base64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON_BASE64")
+    if raw_json_base64:
+        raw_json = base64.b64decode(raw_json_base64).decode("utf-8")
+        info = json.loads(raw_json)
+        return Credentials.from_service_account_info(info, scopes=SCOPES)
+
     raw_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
     if raw_json:
         info = json.loads(raw_json)
@@ -19,7 +26,8 @@ def _credentials() -> Credentials:
     path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
     if not path:
         raise RuntimeError(
-            "Set GOOGLE_APPLICATION_CREDENTIALS or GOOGLE_SERVICE_ACCOUNT_JSON for Google Sheets access."
+            "Set GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_SERVICE_ACCOUNT_JSON, "
+            "or GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 for Google Sheets access."
         )
     return Credentials.from_service_account_file(path, scopes=SCOPES)
 

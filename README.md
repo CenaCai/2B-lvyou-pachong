@@ -53,6 +53,7 @@ Add n8n when:
 5. In Crawlab, set one of:
    - `GOOGLE_APPLICATION_CREDENTIALS=/path/to/google-service-account.json`
    - or `GOOGLE_SERVICE_ACCOUNT_JSON=<raw json string>`
+   - or `GOOGLE_SERVICE_ACCOUNT_JSON_BASE64=<base64 json string>` recommended when Crawlab env input does not handle multiline JSON well.
 
 ## Crawlab setup
 
@@ -80,6 +81,26 @@ GOOGLE_SHEET_ID=1eUknA5fqniT1KMLdsmqKSrpVXSZW726e3MXvfieOUU8
 GOOGLE_WORKSHEET_NAME=leads
 SOURCE_URLS=https://example.com/contact,https://example.org/team
 ```
+
+Recommended Google auth variable:
+
+```bash
+GOOGLE_SERVICE_ACCOUNT_JSON_BASE64=<base64 encoded service-account JSON>
+```
+
+To generate this value on your own computer:
+
+```bash
+base64 -w 0 google-service-account.json
+```
+
+If your `base64` command does not support `-w`, use:
+
+```bash
+python3 -c "import base64, pathlib; print(base64.b64encode(pathlib.Path('google-service-account.json').read_bytes()).decode())"
+```
+
+Do not commit this value to GitHub.
 
 ## Output columns
 
@@ -120,4 +141,3 @@ Recommended production path:
 ```text
 Crawlab -> Google Sheets review -> n8n -> Mautic Contacts API
 ```
-
