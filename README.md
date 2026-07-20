@@ -141,3 +141,81 @@ Recommended production path:
 ```text
 Crawlab -> Google Sheets review -> n8n -> Mautic Contacts API
 ```
+
+## Run without Crawlab: GitHub Actions
+
+GitHub cannot host the Crawlab web console. If you do not have Crawlab deployed yet, use the included GitHub Actions workflow template to run the crawler from GitHub.
+
+### 1. Enable the workflow
+
+This repository includes a workflow template:
+
+```text
+docs/run-lead-crawler.workflow.yml
+```
+
+To enable it in GitHub:
+
+```text
+Add file
+  -> Create new file
+  -> file name: .github/workflows/run-lead-crawler.yml
+```
+
+Copy the full content from `docs/run-lead-crawler.workflow.yml`, paste it into that new file, then commit it to `main`.
+
+### 2. Add the Google secret
+
+In the GitHub repository:
+
+```text
+Settings
+  -> Secrets and variables
+  -> Actions
+  -> New repository secret
+```
+
+Create this secret:
+
+```text
+Name: GOOGLE_SERVICE_ACCOUNT_JSON_BASE64
+Value: <base64 encoded service-account JSON>
+```
+
+On macOS, generate the value with:
+
+```bash
+base64 -i ~/Downloads/your-service-account-file.json
+```
+
+Do not put this value in GitHub code, issues, README, or chat.
+
+### 3. Share the Google Sheet
+
+Share the target Google Sheet with the service-account email as Editor.
+
+For your current service account:
+
+```text
+id-477@nth-pier-491409-b0.iam.gserviceaccount.com
+```
+
+### 4. Run the workflow
+
+In GitHub:
+
+```text
+Actions
+  -> Run lead crawler
+  -> Run workflow
+```
+
+Fill:
+
+```text
+source_urls: https://example.com/contact,https://example.org/team
+worksheet_name: leads
+dry_run: false
+```
+
+For a first test, set `dry_run=true`. It will upload `output/leads.csv` as a workflow artifact instead of writing to Google Sheets.
